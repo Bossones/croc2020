@@ -2,29 +2,26 @@ package ru.croc.coder.domain.users;
 
 import ru.croc.coder.domain.tasks.Course;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
-public class Student extends AbstractUser {
+public class Student extends User {
 
-    @ManyToMany
-    private List<Course> coursesForStudent;
+/*    @ManyToMany
+    private Set<Course> coursesForStudent;*/
 
-    public List<Course> getCoursesForStudent() {
+/*    public Set<Course> getCoursesForStudent() {
         return coursesForStudent;
     }
 
     public Student setCoursesForStudent(Course course) {
         Objects.requireNonNull(course);
-        if (!coursesForStudent.contains(course))
-            coursesForStudent.add(course);
+        coursesForStudent.add(course);
         return this;
-    }
+    }*/
 
     @Override
     public Long getId() {

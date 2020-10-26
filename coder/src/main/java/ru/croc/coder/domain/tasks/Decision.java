@@ -15,8 +15,8 @@ public class Decision {
     @Column(nullable = false)
     private String content;
 
-    @OneToOne
-    private Student student;
+/*    @OneToOne
+    private Student student;*/
 
     @Column(nullable = false)
     private boolean solved;
@@ -40,7 +40,7 @@ public class Decision {
         return this;
     }
 
-    public Student getStudent() {
+    /*public Student getStudent() {
         return student;
     }
 
@@ -48,7 +48,7 @@ public class Decision {
         Objects.requireNonNull(student);
         this.student = student;
         return this;
-    }
+    }*/
 
     public boolean isSolved() {
         return solved;

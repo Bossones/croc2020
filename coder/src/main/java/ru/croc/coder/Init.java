@@ -10,6 +10,7 @@ import ru.croc.coder.domain.tasks.Decision;
 import ru.croc.coder.domain.tasks.Task;
 import ru.croc.coder.domain.users.Student;
 import ru.croc.coder.domain.users.Teacher;
+import ru.croc.coder.domain.users.User;
 import ru.croc.coder.repository.CourseRepository;
 import ru.croc.coder.repository.DecisionRepository;
 import ru.croc.coder.repository.TaskRepository;
@@ -40,43 +41,41 @@ public class Init implements CommandLineRunner {
         log.info("Number of users: {}", numUser);
 
         Teacher teacher = new Teacher()
-                .setEmail("ilya_mamaev@google.com")
-                .setFirstName("Ilya")
-                .setLastName("Mamaev")
+                .setFirstName("Konstantin")
+                .setLastName("Vasilievich")
+                .setEmail("k.vasilievich@gmail.com")
                 .setProfile("Machine Learning");
 
-        Student student = new Student()
-                .setEmail("bogdan_boginskiy@mail.ru")
-                .setFirstName("Bogdan")
-                .setLastName("Boginskiy");
-
-        Course courseMachineLearning = new Course()
-                .setOpened(true)
+        Course course = new Course()
                 .setNameOfCourse("Machine Learning");
 
         Task task = new Task()
-                .setNameOfTask("Task one");
+                .setNameOfTask("task n 001");
+
+        Student student = new Student()
+                .setFirstName("Svetlana")
+                .setLastName("Krasnova")
+                .setEmail("s.krasnova@mail.ru");
 
         Decision decision = new Decision()
-                .setContent("public static void main(String[] args) { \n System.out.println(\"Hello world\")\n}")
                 .setSolved(true)
-                .setStudent(student);
+                .setContent("public static void main(String[] args) { System.out.println(\"Hello world!\")}");
 
+        User randomUser = createUser("Bogdan", "Boginskiy", "bogdan_boginskiy@mail.ru");
+        User randomUser2 = createUser("Nikolai", "Dexter", "n.dexter@croc.ru");
 
-        teacher.setCourse(courseMachineLearning);
-        courseMachineLearning.setTask(task);
-        courseMachineLearning.setStudent(student);
-        student.setCoursesForStudent(courseMachineLearning);
-        task.setCourse(courseMachineLearning);
-        task.setDecisionOfTask(decision);
-
-        userRepository.save(teacher);
+        log.info("saving student");
         userRepository.save(student);
-        courseRepository.save(courseMachineLearning);
+        log.info("saving teacher");
+        userRepository.save(teacher);
+        log.info("saving task");
         taskRepository.save(task);
+        log.info("saving course");
+        courseRepository.save(course);
         decisionRepository.save(decision);
 
-
+        userRepository.save(randomUser);
+        userRepository.save(randomUser2);
 
 //        if (userRepository.findByEmailIgnoreCase("bogdan_boginskiy@mail.ru").isEmpty()) {
 //            log.info("Creating initial user");
@@ -86,5 +85,12 @@ public class Init implements CommandLineRunner {
 //                    .setLastName("Boginskiy");
 //            userRepository.save(teacher);
 //        }
+    }
+
+    private User createUser(String name, String lastName, String email) {
+        return new User()
+                .setEmail(email)
+                .setFirstName(name)
+                .setLastName(lastName);
     }
 }

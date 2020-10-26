@@ -4,10 +4,11 @@ import ru.croc.coder.domain.users.Student;
 import ru.croc.coder.domain.users.Teacher;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-@Entity
+@Table(name = "Course")
+@Entity(name = "Course")
 public class Course {
 
     @Id
@@ -21,14 +22,14 @@ public class Course {
     @Column(nullable = false)
     private boolean opened;
 
-    @OneToMany
-    private List<Task> tasks;
+/*    @OneToMany
+    private Set<Task> tasks;
 
     @ManyToMany
-    private List<Teacher> teachers;
+    private Set<Teacher> teachers;
 
     @ManyToMany
-    private List<Student> students;
+    private Set<Student> students;*/
 
     public Long getId() {
         return id;
@@ -43,54 +44,52 @@ public class Course {
         return nameOfCourse;
     }
 
+
     public Course setNameOfCourse(String nameOfCourse) {
+        Objects.requireNonNull(nameOfCourse);
         this.nameOfCourse = nameOfCourse;
         return this;
     }
+    /*
 
-    public List<Task> getTasks() throws IllegalAccessException {
+    public Set<Task> getTasks() throws IllegalAccessException {
         if(opened) return tasks;
         else throw new IllegalAccessException("You cannot get access to this course");
     }
 
-    public List<Task> getTasksForStudent(Student student) throws IllegalAccessException {
-        Objects.requireNonNull(student);
-        if(students.contains(student)) return tasks;
-        else throw new IllegalAccessException("You cannot get access to this course");
+    public Set<Task> getTasksForStudent() {
+        return tasks;
     }
 
     public boolean setTask(Task task) {
         Objects.requireNonNull(task);
-        if (!tasks.contains(task))
-            return tasks.add(task);
-        return false;
+        return tasks.add(task);
     }
 
-    public List<Teacher> getTeachers() {
+    public Set<Teacher> getTeachers() {
         return teachers;
     }
 
-    public List<Student> getStudents() {
+    public Set<Student> getStudents() {
         return students;
     }
 
     public Course setStudent(Student student) {
         Objects.requireNonNull(student);
-        if (!students.contains(student))
-            students.add(student);
+        students.add(student);
         return this;
     }
+*/
 
     public boolean isOpened() {
         return opened;
     }
 
-    public Course setTeacher(Teacher teacher) {
+/*    public Course setTeacher(Teacher teacher) {
         Objects.requireNonNull(teacher);
-        if (!teachers.contains(teacher))
-            this.teachers.add(teacher);
+        teachers.add(teacher);
         return this;
-    }
+    }*/
 
     public Course setOpened(boolean opened) {
         this.opened = opened;

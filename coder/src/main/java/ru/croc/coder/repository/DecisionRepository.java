@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface DecisionRepository extends CrudRepository<Decision, Long> {
 
-    Optional<Student> findByStudent(Student student);
+
 }

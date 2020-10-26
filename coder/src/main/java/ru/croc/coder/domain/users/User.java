@@ -1,20 +1,62 @@
 package ru.croc.coder.domain.users;
 
-public interface User {
+import javax.persistence.*;
+import java.util.Objects;
 
-    Long getId();
+@Table(name = "User")
+@Entity(name = "User")
+public class User {
 
-    User setId(Long id);
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    String getEmail();
+    @Column(unique = true, nullable = false)
+    private String email;
 
-    User setEmail(String email);
+    @Column(nullable = false)
+    private String firstName;
 
-    String getFirstName();
+    @Column(nullable = false)
+    private String lastName;
 
-    User setFirstName(String firstName);
+    public Long getId() {
+        return id;
+    }
 
-    String getLastName();
+    public User setId(Long id) {
+        Objects.requireNonNull(id);
+        this.id = id;
+        return this;
+    }
 
-    User setLastName(String lastName);
+    public String getEmail() {
+        return email;
+    }
+
+    public User setEmail(String email) {
+        Objects.requireNonNull(email);
+        this.email = email;
+        return this;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public User setFirstName(String firstName) {
+        Objects.requireNonNull(firstName);
+        this.firstName = firstName;
+        return this;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public User setLastName(String lastName) {
+        Objects.requireNonNull(lastName);
+        this.lastName = lastName;
+        return this;
+    }
 }

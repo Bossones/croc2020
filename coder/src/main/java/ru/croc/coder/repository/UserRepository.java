@@ -1,12 +1,13 @@
 package ru.croc.coder.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import ru.croc.coder.domain.users.AbstractUser;
+import ru.croc.coder.domain.users.User;
+
 
 import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<AbstractUser, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
-    Optional<AbstractUser> findByEmailIgnoreCase(String email);
+    Optional<User> findByEmailIgnoreCase(String email);
 
 }

@@ -1,6 +1,7 @@
 package ru.croc.coder.domain.tasks;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Task {
@@ -9,14 +10,14 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    private Course course;
+   /* @ManyToOne
+    private Course course;*/
 
     @Column(nullable = false)
     private String nameOfTask;
 
-    @OneToOne
-    private Decision decisionOfTask;
+    /*@OneToOne
+    private Decision decisionOfTask;*/
 
     public Long getId() {
         return id;
@@ -27,30 +28,32 @@ public class Task {
         return this;
     }
 
-    public Course getCourse() {
+   /* public Course getCourse() {
         return course;
     }
 
     public Task setCourse(Course course) {
         this.course = course;
         return this;
-    }
+    }*/
 
     public String getNameOfTask() {
         return nameOfTask;
     }
 
     public Task setNameOfTask(String nameOfTask) {
+        Objects.requireNonNull(nameOfTask);
         this.nameOfTask = nameOfTask;
         return this;
     }
 
-    public Decision getDecisionOfTask() {
+   /* public Decision getDecisionOfTask() {
         return decisionOfTask;
     }
 
     public Task setDecisionOfTask(Decision decisionOfTask) {
+        Objects.requireNonNull(decisionOfTask);
         this.decisionOfTask = decisionOfTask;
         return this;
-    }
+    }*/
 }
