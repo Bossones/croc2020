@@ -79,4 +79,15 @@ public class Teacher extends User {
         super.setLastName(lastName);
         return this;
     }
+
+    @Override
+    public String getPassword() {
+        return super.getPassword();
+    }
+
+    @Override
+    public Teacher setPassword(String password) {
+        super.setPassword(password);
+        return this;
+    }
 }

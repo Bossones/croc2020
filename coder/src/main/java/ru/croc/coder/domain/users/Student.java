@@ -66,4 +66,15 @@ public class Student extends User {
         super.setLastName(lastName);
         return this;
     }
+
+    @Override
+    public String getPassword() {
+        return super.getPassword();
+    }
+
+    @Override
+    public Student setPassword(String password) {
+        super.setPassword(password);
+        return this;
+    }
 }

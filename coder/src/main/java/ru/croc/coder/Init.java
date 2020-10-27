@@ -44,7 +44,8 @@ public class Init implements CommandLineRunner {
                 .setFirstName("Konstantin")
                 .setLastName("Vasilievich")
                 .setEmail("k.vasilievich@gmail.com")
-                .setProfile("Machine Learning");
+                .setProfile("Machine Learning")
+                .setPassword("1234");
 
         Course course = new Course()
                 .setNameOfCourse("Machine Learning");
@@ -55,14 +56,15 @@ public class Init implements CommandLineRunner {
         Student student = new Student()
                 .setFirstName("Svetlana")
                 .setLastName("Krasnova")
-                .setEmail("s.krasnova@mail.ru");
+                .setEmail("s.krasnova@mail.ru")
+                .setPassword("4321");
 
         Decision decision = new Decision()
                 .setSolved(true)
                 .setContent("public static void main(String[] args) { System.out.println(\"Hello world!\")}");
 
-        User randomUser = createUser("Bogdan", "Boginskiy", "bogdan_boginskiy@mail.ru");
-        User randomUser2 = createUser("Nikolai", "Dexter", "n.dexter@croc.ru");
+        User randomUser = createUser("Bogdan", "Boginskiy", "bogdan_boginskiy@mail.ru", "2343");
+        User randomUser2 = createUser("Nikolai", "Dexter", "n.dexter@croc.ru", "3243");
 
         log.info("saving student");
         userRepository.save(student);
@@ -87,10 +89,11 @@ public class Init implements CommandLineRunner {
 //        }
     }
 
-    private User createUser(String name, String lastName, String email) {
+    private User createUser(String name, String lastName, String email, String password) {
         return new User()
                 .setEmail(email)
                 .setFirstName(name)
-                .setLastName(lastName);
+                .setLastName(lastName)
+                .setPassword(password);
     }
 }
