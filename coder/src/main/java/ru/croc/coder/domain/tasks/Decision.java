@@ -1,25 +1,35 @@
 package ru.croc.coder.domain.tasks;
 
 import ru.croc.coder.domain.users.Student;
+import ru.croc.coder.domain.users.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Entity
+@Entity(name = "Decision")
+@Table(name = "DECISIONS")
 public class Decision {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long decisionId;
 
-    @Column(nullable = false)
-    private String content;
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    private User author;
 
-/*    @OneToOne
-    private Student student;*/
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    private Task task;
+
+    @Column(name = "time", nullable = false, columnDefinition = "TIMESTAMP")
+    private LocalDateTime time;
+
+    private Code code;
 
     @Column(nullable = false)
-    private boolean solved;
+    private Boolean solved = false;
 
     public Long getDecisionId() {
         return decisionId;
@@ -30,31 +40,47 @@ public class Decision {
         return this;
     }
 
-    public String getContent() {
-        return content;
+    public User getAuthor() {
+        return author;
     }
 
-    public Decision setContent(String content) {
-        Objects.requireNonNull(content);
-        this.content = content;
+    public Decision setAuthor(User author) {
+        this.author = author;
         return this;
     }
 
-    /*public Student getStudent() {
-        return student;
+    public Task getTask() {
+        return task;
     }
 
-    public Decision setStudent(Student student) {
-        Objects.requireNonNull(student);
-        this.student = student;
+    public Decision setTask(Task task) {
+        this.task = task;
         return this;
-    }*/
+    }
 
-    public boolean isSolved() {
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public Decision setTime(LocalDateTime time) {
+        this.time = time;
+        return this;
+    }
+
+    public Code getCode() {
+        return code;
+    }
+
+    public Decision setCode(Code code) {
+        this.code = code;
+        return this;
+    }
+
+    public Boolean getSolved() {
         return solved;
     }
 
-    public Decision setSolved(boolean solved) {
+    public Decision setSolved(Boolean solved) {
         this.solved = solved;
         return this;
     }

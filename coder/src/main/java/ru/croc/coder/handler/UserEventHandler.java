@@ -1,4 +1,4 @@
-package ru.croc.coder;
+package ru.croc.coder.handler;
 
 import org.springframework.data.rest.core.annotation.HandleBeforeSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;

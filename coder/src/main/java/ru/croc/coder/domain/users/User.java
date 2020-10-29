@@ -3,8 +3,9 @@ package ru.croc.coder.domain.users;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Table(name = "User")
+
 @Entity(name = "User")
+@Table(name = "users")
 public class User {
 
     @Id
