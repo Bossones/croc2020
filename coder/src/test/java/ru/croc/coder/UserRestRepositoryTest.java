@@ -35,7 +35,7 @@ public class UserRestRepositoryTest {
     }
 
    @Test
-    public void testPostRequest() throws Exception {
+    public void testPostUserRequest() throws Exception {
         Map<String, String> stringObjectMap = new HashMap<>(Map.of());
         stringObjectMap.put("email", "b.boginskij@voskhod.ru");
         stringObjectMap.put("firstName", "Bogdan");
@@ -47,22 +47,23 @@ public class UserRestRepositoryTest {
     }
 
     @Test
-    public void testPutRequest() throws Exception {
+    public void testPutUserRequest() throws Exception {
         Map<String, String> userRequest = Map.of("firstName", "Ilya", "lastName", "Gorodovich",
                 "password", "8976", "email", "i.gor@gmail.com");
         JSONObject jsonObject = new JSONObject(userRequest);
-        mockMvc.perform(MockMvcRequestBuilders.put("/users/1"))
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/1").content(jsonObject.toJSONString()))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
     }
 
     @Test
-    public void testGetUsers() throws Exception {
+    public void testGetUsersRequest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/users")).andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
     }
 
     @Test
-    public void testDeleteRequest() throws Exception {
+    public void testDeleteUserRequest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/users/1"))
-                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
     }
+
 }

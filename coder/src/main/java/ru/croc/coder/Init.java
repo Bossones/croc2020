@@ -38,7 +38,7 @@ public class Init implements CommandLineRunner {
         Task task = createEasyJavaTask(
                 3,
                 "Test Description",
-                LocalDateTime.now(),
+                LocalDateTime.now().plusDays(4),
                 new Code().setText("Some text").setLanguage(ProgrammingLanguage.JAVA),
                 teacher);
         userRepository.save(teacher);

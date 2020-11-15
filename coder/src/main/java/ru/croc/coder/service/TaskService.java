@@ -2,6 +2,8 @@ package ru.croc.coder.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.croc.coder.domain.tasks.Code;
 import ru.croc.coder.domain.tasks.Decision;
 import ru.croc.coder.domain.tasks.ProgrammingLanguage;
@@ -12,6 +14,7 @@ import ru.croc.coder.repository.TaskRepository;
 import ru.croc.coder.repository.UserRepository;
 import ru.croc.coder.service.exceptions.NotFoundException;
 import ru.croc.coder.service.exceptions.ProblemConstraintException;
+import ru.croc.coder.service.exceptions.TimeEndedException;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
@@ -30,6 +33,7 @@ public class TaskService {
     @Autowired
     private DecisionRepository decisionRepository;
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public Decision submit(Long userId, Long taskId, String code) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
         Task task = taskRepository.findById(taskId).orElseThrow(NotFoundException::new);
@@ -48,6 +52,8 @@ public class TaskService {
                                 .setLanguage(ProgrammingLanguage.JAVA)
                                 .setText(code))
                 .setSolved(random.nextBoolean());
+        if (task.getTimeToDeadLine().isBefore(decision.getTime()))
+            throw new TimeEndedException("Time to solve this task is up");
         return decisionRepository.save(decision);
     }
 }

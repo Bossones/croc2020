@@ -1,11 +1,9 @@
 package ru.croc.coder.domain.tasks;
 
-import ru.croc.coder.domain.users.Student;
 import ru.croc.coder.domain.users.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity(name = "Decision")
 @Table(name = "DECISIONS")
