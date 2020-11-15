@@ -24,6 +24,17 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
+    private Integer attemptsCount = 0;
+
+    public Integer getAttemptsCount() {
+        return attemptsCount;
+    }
+
+    public User setAttemptsCount(Integer attemptsCount) {
+        this.attemptsCount = attemptsCount;
+        return this;
+    }
+
     public Long getId() {
         return id;
     }

@@ -24,10 +24,24 @@ public class Decision {
     @Column(name = "time", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime time;
 
+    @Embedded
     private Code code;
 
-    @Column(nullable = false)
-    private Boolean solved = false;
+    @Enumerated(EnumType.STRING)
+    @Column
+    private ProcessStatus checkStatus;
+
+    @Column(name = "solved")
+    private Boolean solved;
+
+    public ProcessStatus getCheckStatus() {
+        return checkStatus;
+    }
+
+    public Decision setCheckStatus(ProcessStatus checkStatus) {
+        this.checkStatus = checkStatus;
+        return this;
+    }
 
     public Long getDecisionId() {
         return decisionId;

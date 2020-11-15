@@ -44,9 +44,9 @@ public class Init implements CommandLineRunner {
         userRepository.save(teacher);
         userRepository.save(student);
         taskRepository.save(task);
-        taskService.submit(student.getId(), task.getId(), "Hello World");
+        /*taskService.submit(student.getId(), task.getId(), "Hello World");
         taskService.submit(student.getId(), task.getId(), "Hello World2");
-        taskService.submit(student.getId(), task.getId(), "Hello World3");
+        taskService.submit(student.getId(), task.getId(), "Hello World3");*/
         //taskService.submit(student.getId(), task.getId(), "Hello World4");
     }
 
