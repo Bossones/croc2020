@@ -21,8 +21,8 @@ public class Decision {
     @ManyToOne
     private Task task;
 
-    @Column(name = "time", nullable = false, columnDefinition = "TIMESTAMP")
-    private LocalDateTime time;
+    @Column(nullable = false, columnDefinition = "TIMESTAMP")
+    private LocalDateTime submitTime;
 
     @Embedded
     private Code code;
@@ -70,12 +70,12 @@ public class Decision {
         return this;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDateTime getSubmitTime() {
+        return submitTime;
     }
 
-    public Decision setTime(LocalDateTime time) {
-        this.time = time;
+    public Decision setSubmitTime(LocalDateTime submitTime) {
+        this.submitTime = submitTime;
         return this;
     }
 

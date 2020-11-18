@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.croc.coder.domain.tasks.Decision;
+import ru.croc.coder.domain.users.Student;
+import ru.croc.coder.domain.users.Teacher;
 import ru.croc.coder.domain.users.User;
 import ru.croc.coder.repository.UserRepository;
 import ru.croc.coder.service.TaskService;
@@ -31,23 +33,6 @@ public class DecisionController {
     @Autowired
     private UserRepository userRepository;
 
-/*    @Autowired
-    private ModelMapper modelMapper;*/
-
-    @Operation(summary = "Authenticate user")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Authenticated user", content = {
-                    @Content(schema = @Schema(implementation = UserDto.class))
-            }),
-            @ApiResponse(responseCode = "401", description = "Authenticate failed")
-    })
-    @PostMapping("/auth/{userId}")
-    public UserDto auth(@PathVariable Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(NotFoundException::new);
-        userContext.setCurrentUser(user);
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(user, UserDto.class);
-    }
 
     @PostMapping("/tasks/{taskId}/decisions")
     public DecisionDto submit(@PathVariable Long taskId, @RequestBody String code) throws InterruptedException {

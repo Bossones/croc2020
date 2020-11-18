@@ -41,8 +41,10 @@ public class UserRestRepositoryTest {
         stringObjectMap.put("firstName", "Bogdan");
         stringObjectMap.put("lastName", "Boginskiy");
         stringObjectMap.put("password", "1234");
+        stringObjectMap.put("passwordForConfirmation", "1234");
+        stringObjectMap.put("role", "student");
         JSONObject jsonObject = new JSONObject(stringObjectMap);
-        mockMvc.perform(MockMvcRequestBuilders.post("/users").content(jsonObject.toJSONString()))
+        mockMvc.perform(MockMvcRequestBuilders.post("/register").content(jsonObject.toJSONString()))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
     }
 

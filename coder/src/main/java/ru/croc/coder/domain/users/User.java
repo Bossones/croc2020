@@ -1,7 +1,11 @@
 package ru.croc.coder.domain.users;
 
+import ru.croc.coder.domain.tasks.Course;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Entity(name = "User")
@@ -24,7 +28,28 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @JoinTable(name = "USER_COURSE_LINK",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "COURSE_ID")
+    )
+    private Set<Course> courses = new HashSet<>();
+
+    public User setCourses(Set<Course> courses) {
+        this.courses = courses;
+        return this;
+    }
+
+    public User setOneCourse(Course course) {
+        courses.add(course);
+        return this;
+    }
+
     private Integer attemptsCount = 0;
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
 
     public Integer getAttemptsCount() {
         return attemptsCount;

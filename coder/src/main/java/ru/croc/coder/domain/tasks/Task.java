@@ -27,11 +27,27 @@ public class Task {
     @Column(name = "level", nullable = false)
     private TaskLevel level;
 
+    @JoinColumn(name = "course_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Course course;
+
     @Embedded
     private Code template;
 
-    @Column(nullable = false)
+    @Column(name = "timeToDeadLine", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime timeToDeadLine;
+
+    @Column(name = "timeOfBeginning", nullable = false, columnDefinition = "TIMESTAMP")
+    private LocalDateTime timeOfStart;
+
+    public LocalDateTime getTimeOfStart() {
+        return timeOfStart;
+    }
+
+    public Task setTimeOfStart(LocalDateTime timeOfBeginning) {
+        this.timeOfStart = timeOfBeginning;
+        return this;
+    }
 
     public LocalDateTime getTimeToDeadLine() {
         return timeToDeadLine;
@@ -43,6 +59,10 @@ public class Task {
     }
 
     private Integer maxAttempts;
+
+    public Course getCourse() {
+        return course;
+    }
 
     public Teacher getAuthor() {
         return author;

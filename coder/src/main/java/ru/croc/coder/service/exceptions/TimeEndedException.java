@@ -1,6 +1,6 @@
 package ru.croc.coder.service.exceptions;
 
-public class TimeEndedException extends RuntimeException {
+public class TimeEndedException extends ProblemConstraintException{
 
     public TimeEndedException() {
     }

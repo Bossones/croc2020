@@ -14,9 +14,11 @@ import ru.croc.coder.repository.TaskRepository;
 import ru.croc.coder.repository.UserRepository;
 import ru.croc.coder.service.exceptions.NotFoundException;
 import ru.croc.coder.service.exceptions.ProblemConstraintException;
+import ru.croc.coder.service.exceptions.TaskHasNotStartedException;
 import ru.croc.coder.service.exceptions.TimeEndedException;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -59,15 +61,22 @@ public class TaskService {
 
         Decision decision = new Decision()
                 .setAuthor(user)
-                .setTime(LocalDateTime.now())
+                .setSubmitTime(LocalDateTime.now())
                 .setTask(task)
                 .setCode(new Code()
                                 .setLanguage(ProgrammingLanguage.JAVA)
                                 .setText(code))
                 .setCheckStatus(ProcessStatus.QUEUED);
 
-        if (task.getTimeToDeadLine().isBefore(decision.getTime()))
+        LocalDateTime timeOfSubmit = decision.getSubmitTime();
+
+        if (task.getTimeOfStart().isAfter(timeOfSubmit)) {
+            throw new TaskHasNotStartedException("Task didn't start! The task will start "
+                    + task.getTimeOfStart().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        }
+        if (task.getTimeToDeadLine().isBefore(timeOfSubmit)) {
             throw new TimeEndedException("Time to solve this task is up");
+        }
         return decisionRepository.save(decision);
     }
 

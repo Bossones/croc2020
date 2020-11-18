@@ -5,7 +5,6 @@ import javax.persistence.*;
 @Entity
 public class Student extends User {
 
-
     @Override
     public Student setId(Long id) {
         super.setId(id);

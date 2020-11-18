@@ -48,9 +48,9 @@ public class RegistrationService {
         JsonNode jsonUserNodeRole = jsonUserNodeRoot.get("role");
         String role = jsonUserNodeRole.asText();
         User user;
-        if (role.equals("student")) {
+        if (role.equalsIgnoreCase("student")) {
             user = objectMapper.readValue(jsonUserInformation, Student.class);
-        } else if (role.equals("teacher")) {
+        } else if (role.equalsIgnoreCase("teacher")) {
             user = objectMapper.readValue(jsonUserInformation, Teacher.class);
         } else {
             throw new UnknownRoleException("UnknownRoleException");
