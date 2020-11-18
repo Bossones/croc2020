@@ -1,0 +1,10 @@
+package ru.croc.coder.service.exceptions;
+
+public class InvalidEmailException extends RuntimeException{
+    public InvalidEmailException() {
+    }
+
+    public InvalidEmailException(String message) {
+        super(message);
+    }
+}

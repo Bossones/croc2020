@@ -33,7 +33,7 @@ public class Init implements CommandLineRunner {
     public void run(String... args) {
         log.info("Init application");
 
-        Teacher teacher = createTeacher("Andrei", "Kogun", "akogun@croc.ru", "1234");
+        /*Teacher teacher = createTeacher("Andrei", "Kogun", "akogun@croc.ru", "1234");
         Student student = createStudent("Bogdan", "Boginskiy", "b.boginskiy@mail.ru", "0234123");
         Task task = createEasyJavaTask(
                 3,
@@ -43,7 +43,7 @@ public class Init implements CommandLineRunner {
                 teacher);
         userRepository.save(teacher);
         userRepository.save(student);
-        taskRepository.save(task);
+        taskRepository.save(task);*/
         /*taskService.submit(student.getId(), task.getId(), "Hello World");
         taskService.submit(student.getId(), task.getId(), "Hello World2");
         taskService.submit(student.getId(), task.getId(), "Hello World3");*/
