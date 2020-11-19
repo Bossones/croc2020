@@ -24,7 +24,8 @@ public class TaskController {
     }
 
     @PostMapping("/course/{courseId}/task")
-    public TaskDto createTask(@PathVariable Long courseId, @RequestBody String jsonTaskInformation) throws JsonProcessingException {
+    public TaskDto createTask(@PathVariable Long courseId, @RequestBody String jsonTaskInformation)
+            throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

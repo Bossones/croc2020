@@ -9,7 +9,7 @@ public class TaskDto {
 
     private String description;
 
-    private Teacher author;
+    private UserDto author;
 
     private TaskLevel level;
 
@@ -27,11 +27,11 @@ public class TaskDto {
         this.description = description;
     }
 
-    public Teacher getAuthor() {
+    public UserDto getAuthor() {
         return author;
     }
 
-    public void setAuthor(Teacher author) {
+    public void setAuthor(UserDto author) {
         this.author = author;
     }
 
