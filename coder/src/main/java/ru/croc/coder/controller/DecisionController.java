@@ -24,18 +24,15 @@ import ru.croc.coder.service.exceptions.NotFoundException;
 @RestController
 public class DecisionController {
 
-    @Autowired
+
     private TaskService taskService;
 
-    @Autowired
-    private UserContext userContext;
+    public DecisionController(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
-    @Autowired
-    private UserRepository userRepository;
-
-
-    @PostMapping("/tasks/{taskId}/decisions")
-    public DecisionDto submit(@PathVariable Long taskId, @RequestBody String code) throws InterruptedException {
+    @PostMapping("tasks/{taskId}/decisions")
+    public DecisionDto submit(@PathVariable Long taskId, @RequestBody String code) {
         Decision decision = taskService.submit(taskId, code);
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(decision, DecisionDto.class);

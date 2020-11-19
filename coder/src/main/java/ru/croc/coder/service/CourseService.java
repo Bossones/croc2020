@@ -12,7 +12,9 @@ import ru.croc.coder.domain.users.Teacher;
 import ru.croc.coder.repository.CourseRepository;
 import ru.croc.coder.repository.TaskRepository;
 import ru.croc.coder.repository.UserRepository;
-import ru.croc.coder.service.exceptions.CourseCreatingPermissionDenied;
+import ru.croc.coder.service.exceptions.NotAuthorizedException;
+import ru.croc.coder.service.exceptions.PermissionDenied;
+import ru.croc.coder.service.exceptions.TeacherIsBusyException;
 
 import java.time.LocalDateTime;
 
@@ -38,16 +40,22 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    //@Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public Course courseRegistration(String jsonCourseInformation) throws JsonProcessingException {
         objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
-        Course course = objectMapper.readValue(jsonCourseInformation, Course.class);
+        if (userContext.getCurrentUser() == null) {
+            throw new NotAuthorizedException("It needs to authenticate");
+        }
         if (userContext.getCurrentUser() instanceof Student) {
-            throw new CourseCreatingPermissionDenied("You cannot create course");
+            throw new PermissionDenied("You cannot create course");
         }
         Teacher currentTeacher = (Teacher) userContext.getCurrentUser();
-        course.setRegistrationTime(LocalDateTime.now()).setOneTeacher(currentTeacher);
-        currentTeacher.setOneCourse(course);
+        if (currentTeacher.getCourse() != null) {
+            throw new TeacherIsBusyException("You are already working on different course");
+        }
+        Course course = objectMapper.readValue(jsonCourseInformation, Course.class);
+        course.setCreationTime(LocalDateTime.now());
+        currentTeacher.setCourse(course);
         courseRepository.save(course);
         userRepository.save(currentTeacher);
         return course;

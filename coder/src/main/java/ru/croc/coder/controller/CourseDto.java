@@ -1,7 +1,5 @@
 package ru.croc.coder.controller;
 
-import javax.persistence.Column;
-import javax.persistence.Lob;
 import java.time.LocalDateTime;
 
 public class CourseDto {
@@ -10,7 +8,7 @@ public class CourseDto {
 
     private String courseDescription;
 
-    private LocalDateTime registrationTime;
+    private LocalDateTime creationTime;
 
     public String getCourseName() {
         return courseName;
@@ -28,11 +26,11 @@ public class CourseDto {
         this.courseDescription = courseDescription;
     }
 
-    public LocalDateTime getRegistrationTime() {
-        return registrationTime;
+    public LocalDateTime getCreationTime() {
+        return creationTime;
     }
 
-    public void setRegistrationTime(LocalDateTime registrationTime) {
-        this.registrationTime = registrationTime;
+    public void setCreationTime(LocalDateTime creationTime) {
+        this.creationTime = creationTime;
     }
 }

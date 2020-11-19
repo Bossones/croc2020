@@ -28,27 +28,19 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
-    @JoinTable(name = "USER_COURSE_LINK",
-            joinColumns = @JoinColumn(name = "USER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "COURSE_ID")
-    )
-    private Set<Course> courses = new HashSet<>();
-
-    public User setCourses(Set<Course> courses) {
-        this.courses = courses;
-        return this;
-    }
-
-    public User setOneCourse(Course course) {
-        courses.add(course);
-        return this;
-    }
+    @JoinColumn(name = "course_id")
+    @ManyToOne
+    private Course course;
 
     private Integer attemptsCount = 0;
 
-    public Set<Course> getCourses() {
-        return courses;
+    public Course getCourse() {
+        return course;
+    }
+
+    public User setCourse(Course course) {
+        this.course = course;
+        return this;
     }
 
     public Integer getAttemptsCount() {

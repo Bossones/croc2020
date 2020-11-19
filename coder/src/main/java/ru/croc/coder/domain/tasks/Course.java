@@ -1,5 +1,6 @@
 package ru.croc.coder.domain.tasks;
 
+import org.hibernate.annotations.Proxy;
 import ru.croc.coder.domain.users.Student;
 import ru.croc.coder.domain.users.Teacher;
 
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = "Course")
 @Table(name = "COURSES")
 public class Course {
 
@@ -23,66 +24,27 @@ public class Course {
     @Column(name = "courseDescription")
     private String courseDescription;
 
-    @ManyToMany(mappedBy = "courses")
-    private Set<Teacher> teachers = new HashSet<>();
+    @Column(name = "creationTime", nullable = false, columnDefinition = "TIMESTAMP")
+    private LocalDateTime creationTime;
 
-    @ManyToMany(mappedBy = "courses")
-    private Set<Student> students = new HashSet<>();
+    @Column(name = "timeOfPublication", columnDefinition = "TIMESTAMP")
+    private LocalDateTime timeOfPublication;
 
-    @Column(name = "registrationTime", nullable = false, columnDefinition = "TIMESTAMP")
-    private LocalDateTime registrationTime;
-
-    @OneToMany(mappedBy = "course")
-    private Set<Task> tasks = new HashSet<>();
-
-    public LocalDateTime getRegistrationTime() {
-        return registrationTime;
+    public LocalDateTime getCreationTime() {
+        return creationTime;
     }
 
-    public Course setRegistrationTime(LocalDateTime registrationTime) {
-        this.registrationTime = registrationTime;
+    public LocalDateTime getTimeOfPublication() {
+        return timeOfPublication;
+    }
+
+    public Course setTimeOfPublication(LocalDateTime timeOfPublication) {
+        this.timeOfPublication = timeOfPublication;
         return this;
     }
 
-    public Course setTasks(Set<Task> tasks) {
-        this.tasks = tasks;
-        return this;
-    }
-
-    public Course setOneTask(Task task) {
-        tasks.add(task);
-        return this;
-    }
-
-    public Course setOneStudent(Student student) {
-        students.add(student);
-        return this;
-    }
-
-    public Course setOneTeacher(Teacher teacher) {
-        teachers.add(teacher);
-        return this;
-    }
-
-    public Set<Task> getTasks() {
-        return tasks;
-    }
-
-    public Set<Teacher> getTeachers() {
-        return teachers;
-    }
-
-    public Set<Student> getStudents() {
-        return students;
-    }
-
-    public Course setTeachers(Set<Teacher> teachers) {
-        this.teachers = teachers;
-        return this;
-    }
-
-    public Course setStudents(Set<Student> students) {
-        this.students = students;
+    public Course setCreationTime(LocalDateTime registrationTime) {
+        this.creationTime = registrationTime;
         return this;
     }
 

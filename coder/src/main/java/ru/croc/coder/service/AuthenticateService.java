@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.croc.coder.domain.users.User;
 import ru.croc.coder.repository.UserRepository;
 import ru.croc.coder.service.exceptions.NotFoundException;
@@ -18,6 +20,7 @@ public class AuthenticateService {
         this.userRepository = userRepository;
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public Long authenticateUser(String jsonUserAuth) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonUserNodeRoot = objectMapper.readTree(jsonUserAuth);

@@ -6,7 +6,6 @@ import javax.persistence.*;
 public class Code {
 
     @Lob
-    @Basic(fetch = FetchType.LAZY)
     @Column(name = "text", nullable = false)
     private String text;
 

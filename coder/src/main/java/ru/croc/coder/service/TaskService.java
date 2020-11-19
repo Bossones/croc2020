@@ -8,14 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.croc.coder.domain.tasks.*;
+import ru.croc.coder.domain.users.Student;
+import ru.croc.coder.domain.users.Teacher;
 import ru.croc.coder.domain.users.User;
+import ru.croc.coder.repository.CourseRepository;
 import ru.croc.coder.repository.DecisionRepository;
 import ru.croc.coder.repository.TaskRepository;
 import ru.croc.coder.repository.UserRepository;
-import ru.croc.coder.service.exceptions.NotFoundException;
-import ru.croc.coder.service.exceptions.ProblemConstraintException;
-import ru.croc.coder.service.exceptions.TaskHasNotStartedException;
-import ru.croc.coder.service.exceptions.TimeEndedException;
+import ru.croc.coder.service.exceptions.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -37,12 +37,16 @@ public class TaskService {
 
     private UserContext userContext;
 
+    private CourseRepository courseRepository;
+
     public TaskService(UserRepository userRepository, TaskRepository taskRepository,
-                       DecisionRepository decisionRepository, UserContext userContext) {
+                       DecisionRepository decisionRepository, UserContext userContext,
+                       CourseRepository courseRepository) {
         this.userRepository = userRepository;
         this.taskRepository = taskRepository;
         this.decisionRepository = decisionRepository;
         this.userContext = userContext;
+        this.courseRepository = courseRepository;
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE, noRollbackFor = ProblemConstraintException.class)
@@ -112,6 +116,21 @@ public class TaskService {
             decisionRepository.save(decision);
         }
         return result;
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public Task createTask(Long courseId, Task task) {
+        if (userContext.getCurrentUser() == null) {
+            throw new NotAuthorizedException("It needs authentication");
+        }
+        if (userContext.getCurrentUser() instanceof Student) {
+            throw new PermissionDenied("You cannot create task");
+        }
+        Teacher currentTeacher = (Teacher) userContext.getCurrentUser();
+        Course course = courseRepository.findById(courseId).orElseThrow(NotFoundException::new);
+        task.setCourse(course).setAuthor(currentTeacher);
+        taskRepository.save(task);
+        return task;
     }
 
     private boolean runTests(Decision decision) throws InterruptedException {

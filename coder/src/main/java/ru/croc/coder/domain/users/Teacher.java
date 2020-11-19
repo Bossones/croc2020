@@ -1,10 +1,24 @@
 package ru.croc.coder.domain.users;
 
+import ru.croc.coder.domain.tasks.Course;
+
 import javax.persistence.*;
 
 @Table(name = "TEACHERS")
 @Entity(name = "Teacher")
 public class Teacher extends User {
+
+    @Override
+    public Teacher setCourse(Course course) {
+        super.setCourse(course);
+        return this;
+    }
+
+    @Override
+    public Teacher setAttemptsCount(Integer attemptsCount) {
+        super.setAttemptsCount(attemptsCount);
+        return this;
+    }
 
     @Override
     public Teacher setId(Long id) {

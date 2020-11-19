@@ -1,5 +1,6 @@
 package ru.croc.coder.domain.tasks;
 
+import org.hibernate.annotations.Proxy;
 import ru.croc.coder.domain.users.Teacher;
 
 import javax.persistence.*;
@@ -14,7 +15,6 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Basic(fetch = FetchType.LAZY)
     @Column(name = "description", nullable = false)
     @Lob
     private String description;
@@ -27,8 +27,8 @@ public class Task {
     @Column(name = "level", nullable = false)
     private TaskLevel level;
 
-    @JoinColumn(name = "course_id")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false)
+    @ManyToOne
     private Course course;
 
     @Embedded
@@ -39,6 +39,13 @@ public class Task {
 
     @Column(name = "timeOfBeginning", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime timeOfStart;
+
+    private Integer maxAttempts;
+
+    public Task setCourse(Course course) {
+        this.course = course;
+        return this;
+    }
 
     public LocalDateTime getTimeOfStart() {
         return timeOfStart;
@@ -57,8 +64,6 @@ public class Task {
         this.timeToDeadLine = timeToDeadLine;
         return this;
     }
-
-    private Integer maxAttempts;
 
     public Course getCourse() {
         return course;
