@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.croc.coder.controller.dto.TaskDto;
 import ru.croc.coder.domain.tasks.Task;
 import ru.croc.coder.service.TaskService;
 

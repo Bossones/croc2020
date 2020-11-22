@@ -11,6 +11,7 @@ import ru.croc.coder.domain.users.Student;
 import ru.croc.coder.domain.users.Teacher;
 import ru.croc.coder.domain.users.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface DecisionRepository extends CrudRepository<Decision, Long> {
@@ -23,6 +24,10 @@ public interface DecisionRepository extends CrudRepository<Decision, Long> {
     }
 
     long countByAuthorAndTask(User author, Task task);
+
+    long countBySolvedAndTask(boolean solved, Task task);
+
+    List<Decision> findDecisionsByAuthorId(Long authorId);
 
     @Override
     @RestResource(exported = false)

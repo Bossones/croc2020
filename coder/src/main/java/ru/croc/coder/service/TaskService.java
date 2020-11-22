@@ -1,5 +1,6 @@
 package ru.croc.coder.service;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -7,6 +8,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
+import ru.croc.coder.controller.dto.DecisionDto;
 import ru.croc.coder.domain.tasks.*;
 import ru.croc.coder.domain.users.Student;
 import ru.croc.coder.domain.users.Teacher;
@@ -19,6 +22,8 @@ import ru.croc.coder.service.exceptions.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -52,8 +57,14 @@ public class TaskService {
     @Transactional(isolation = Isolation.SERIALIZABLE, noRollbackFor = ProblemConstraintException.class)
     public Decision submit(Long taskId, String code) {
         User user = userContext.getCurrentUser();
-        Task task = taskRepository.findById(taskId).orElseThrow(NotFoundException::new);
+        if ((user instanceof Student) && user.getCourse() == null) {
+            throw new StudentDoesNotEnrollException("Student haven't enrolled to the course");
+        }
 
+        Task task = taskRepository.findById(taskId).orElseThrow(NotFoundException::new);
+        if (!user.getCourse().getId().equals(task.getCourse().getId())) {
+            throw new PermissionDenied("You cannot submit decision from another course");
+        }
         userRepository.save(user.setAttemptsCount(user.getAttemptsCount() + 1));
 
         if (task.getMaxAttempts() != null) {
@@ -96,6 +107,11 @@ public class TaskService {
                 return;
             decision = result.get();
             boolean solved = runTests(decision);
+            if (solved) {
+                User user = decision.getAuthor();
+                user.setPoints(user.getPoints() + 10);
+                userRepository.save(user);
+            }
             decision.setSolved(solved);
         } finally {
             if (decision != null) {
@@ -131,6 +147,24 @@ public class TaskService {
         task.setCourse(course).setAuthor(currentTeacher);
         taskRepository.save(task);
         return task;
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public List<DecisionDto> getDecisionsStat() {
+        User user = userContext.getCurrentUser();
+        if (user == null) {
+            throw new NotAuthorizedException("You need to authenticate!");
+        }
+        List<Decision> decisionsByAuthor = decisionRepository.findDecisionsByAuthorId(user.getId());
+        if (decisionsByAuthor.isEmpty()) {
+            throw new DecisionsDontExistException("You don't have any decision");
+        }
+        ModelMapper modelMapper = new ModelMapper();
+        List<DecisionDto> decisionStatByAuthor = new ArrayList<>();
+        for (var decision : decisionsByAuthor) {
+            decisionStatByAuthor.add(modelMapper.map(decision, DecisionDto.class));
+        }
+        return decisionStatByAuthor;
     }
 
     private boolean runTests(Decision decision) throws InterruptedException {

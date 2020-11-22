@@ -1,4 +1,4 @@
-package ru.croc.coder.controller;
+package ru.croc.coder.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ru.croc.coder.controller.dto.UserDto;
 import ru.croc.coder.domain.users.User;
 import ru.croc.coder.repository.UserRepository;
 import ru.croc.coder.service.AuthenticateService;

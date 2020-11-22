@@ -3,9 +3,7 @@ package ru.croc.coder.domain.users;
 import ru.croc.coder.domain.tasks.Course;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 
 @Entity(name = "User")
@@ -33,6 +31,17 @@ public class User {
     private Course course;
 
     private Integer attemptsCount = 0;
+
+    private Integer points = 0;
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public User setPoints(Integer points) {
+        this.points = points;
+        return this;
+    }
 
     public Course getCourse() {
         return course;

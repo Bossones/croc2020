@@ -1,7 +1,6 @@
-package ru.croc.coder.controller;
+package ru.croc.coder.controller.dto;
 
 import ru.croc.coder.domain.tasks.TaskLevel;
-import ru.croc.coder.domain.users.Teacher;
 
 import java.time.LocalDateTime;
 

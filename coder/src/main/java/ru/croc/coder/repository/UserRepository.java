@@ -15,4 +15,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findByEmailIgnoreCase(String email);
 
     Optional<Student> findStudentById(Long studentId);
+
+    List<Student> findStudentsByCourseId(Long courseId);
 }
