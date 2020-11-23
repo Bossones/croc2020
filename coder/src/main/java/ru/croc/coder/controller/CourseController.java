@@ -43,4 +43,10 @@ public class CourseController {
     public CourseStatDto getCourseStat(@PathVariable Long courseId) {
         return courseService.courseStat(courseId);
     }
+
+    @PostMapping("/course/expulsion/{studentId}")
+    public UserDto expulsionFromCourse(@PathVariable Long studentId) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(courseService.expulsionFromCourse(studentId), UserDto.class);
+    }
 }

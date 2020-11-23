@@ -4,21 +4,26 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.minidev.json.parser.ParseException;
 import org.modelmapper.ModelMapper;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.croc.coder.controller.dto.TaskDto;
 import ru.croc.coder.domain.tasks.Task;
 import ru.croc.coder.service.TaskService;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @RestController
 public class TaskController {
 
     private TaskService taskService;
+
+    private static final Logger log = LoggerFactory.getLogger(TaskController.class);
 
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
@@ -39,5 +44,13 @@ public class TaskController {
                 .setTimeOfStart(startTime);
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(taskService.createTask(courseId, task), TaskDto.class);
+    }
+
+    @PostMapping(value = "/course/{courseId}/tasks/upload_file")
+    public String uploadFile(@PathVariable Long courseId, @RequestParam("file") MultipartFile file, ModelMap modelMap)
+            throws IOException, ParseException {
+        modelMap.addAttribute("file", file);
+        taskService.uploadFileWithTasks(courseId, file);
+        return "File was uploaded";
     }
 }

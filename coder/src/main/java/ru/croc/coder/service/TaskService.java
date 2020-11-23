@@ -1,14 +1,23 @@
 package ru.croc.coder.service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.ModelMap;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import ru.croc.coder.controller.dto.DecisionDto;
 import ru.croc.coder.domain.tasks.*;
 import ru.croc.coder.domain.users.Student;
@@ -20,6 +29,9 @@ import ru.croc.coder.repository.TaskRepository;
 import ru.croc.coder.repository.UserRepository;
 import ru.croc.coder.service.exceptions.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -170,5 +182,43 @@ public class TaskService {
     private boolean runTests(Decision decision) throws InterruptedException {
         Thread.sleep(5_000);
         return random.nextBoolean();
+    }
+
+    public void uploadFileWithTasks(Long courseId, MultipartFile file) throws IOException, ParseException {
+        if (!file.isEmpty()) {
+            try (BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(file.getInputStream())
+            )) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+                objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                JSONParser jsonParser = new JSONParser(JSONParser.DEFAULT_PERMISSIVE_MODE);
+                JSONArray jsonArray = (JSONArray) jsonParser.parse(bufferedReader);
+                JSONObject jsonObject;
+                JsonNode jsonTaskRootNode;
+                Task task;
+                LocalDateTime startTime;
+                LocalDateTime deadLineTime;
+                for (Object o : jsonArray) {
+                    jsonObject = (JSONObject) o;
+                    jsonTaskRootNode = objectMapper.readTree(jsonObject.toJSONString());
+                    task = objectMapper.readValue(jsonObject.toJSONString(), Task.class);
+                    startTime = LocalDateTime.parse(jsonTaskRootNode.get("startTime").asText());
+                    deadLineTime = LocalDateTime.parse(jsonTaskRootNode.get("deadLineTime").asText());
+                    task
+                            .setTimeToDeadLine(deadLineTime)
+                            .setTimeOfStart(startTime);
+                    createTask(courseId, task);
+                }
+            }
+        }
+
+    }
+
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(10000);
+        return multipartResolver;
     }
 }

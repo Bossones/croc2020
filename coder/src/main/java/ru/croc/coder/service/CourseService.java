@@ -7,10 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.croc.coder.controller.dto.CourseDto;
-import ru.croc.coder.controller.dto.CourseStatDto;
-import ru.croc.coder.controller.dto.StudentCourseStatDto;
-import ru.croc.coder.controller.dto.TaskDto;
+import ru.croc.coder.controller.dto.*;
 import ru.croc.coder.domain.tasks.Course;
 import ru.croc.coder.domain.tasks.Task;
 import ru.croc.coder.domain.users.Student;
@@ -116,8 +113,8 @@ public class CourseService {
         List<Student> studentsInCourse = userRepository.findStudentsByCourseId(courseId);
         List<Task> tasksInCourse = taskRepository.findTasksByCourseId(courseId);
 
-        Long countSolved = 0L;
-        Long countNonSolved = 0L;
+        long countSolved = 0L;
+        long countNonSolved = 0L;
         for (var task : tasksInCourse) {
             countSolved += decisionRepository.countBySolvedAndTask(true, task);
             countNonSolved += decisionRepository.countBySolvedAndTask(false, task);
@@ -141,5 +138,23 @@ public class CourseService {
         courseStatDto.setSolvedDecisions(countSolved);
         courseStatDto.setNonSolvedDecisions(countNonSolved);
         return courseStatDto;
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public User expulsionFromCourse(Long studentId) {
+        User user = userContext.getCurrentUser();
+        if (user instanceof Student) {
+            throw new PermissionDenied("You cannot do this! You ain't a teacher!");
+        }
+        if (user == null) {
+            throw new NotAuthorizedException("You need authenticate");
+        }
+        Teacher currentTeacher = (Teacher) user;
+        Student student = userRepository.findStudentById(studentId).orElseThrow(NotFoundException::new);
+        if (student.getCourse() != null) {
+            student.setCourse(null);
+            userRepository.save(student);
+        }
+        return student;
     }
 }
